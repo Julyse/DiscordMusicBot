@@ -1,13 +1,13 @@
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 import yt_dlp as youtube_dl
 import os
 import asyncio
 import hashlib
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Charger les variables d'environnement du fichier .env
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -157,7 +157,7 @@ async def pause(ctx):
 @bot.command(name='resume', help='Commande pour reprendre la lecture de la musique mise en pause')
 async def resume(ctx):
     voice_client = ctx.message.guild.voice_client
-    if voice_client.is_paused():
+    if voice_client is paused():
         voice_client.resume()
     else:
         await ctx.send("La musique n'est pas en pause.")
@@ -174,4 +174,11 @@ async def skip(ctx):
 @bot.command(name='stop', help='Commande pour arrêter la lecture de la musique et vider la file d\'attente')
 async def stop(ctx):
     voice_client = ctx.message.guild.voice_client
-   
+    if voice_client and voice_client.is_playing():
+        voice_client.stop()
+        queue.clear()
+    else:
+        await ctx.send("Aucune musique n'est en cours de lecture.")
+
+# Démarrer le bot
+bot.run(TOKEN)
